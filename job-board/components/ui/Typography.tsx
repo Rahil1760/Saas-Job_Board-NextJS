@@ -1,0 +1,47 @@
+import { cn } from "@/lib/utils";
+
+export function TypographyH1({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
+    return (
+        <h1
+            className={cn(
+                "scroll-m-20 text-4xl font-extrabold tracking-tight",
+                className
+            )}
+            {...props}
+        />
+    );
+}
+
+export function TypographyH3({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
+    return (
+        <h3
+            className={cn(
+                "scroll-m-20 text-2xl font-semibold tracking-tight",
+                className
+            )}
+            {...props}
+        />
+    );
+}
+
+export function TypographyP({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+    return <p className={cn("leading-7", className)} {...props} />;
+}
+
+export function TypographyMuted({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+    return (
+        <p className={cn("text-sm text-muted-foreground", className)} {...props} />
+    );
+}

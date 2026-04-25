@@ -40,13 +40,16 @@ export function LoginForm({
     })
     const router = useRouter();
     const handleLogin = async (e: any) => {
-        alert("WOrking")
         e.preventDefault()
         try {
             const res: any = await loginAPI(formDetails)
             if (res?.res?.status === 200) {
                 setTimeout(() => {
-                    router.push("/recruiter")
+                    if (formDetails.userType === "recruiter") {
+                        router.push("/recruiter")
+                    } else if (formDetails.userType === "jobseeker") {
+                        router.push("/jobseeker")
+                    }
                 }, 1000);
             } else {
                 toast.error(res?.error?.message || "Login failed")

@@ -16,12 +16,12 @@ export async function POST(req: Request) {
         if (userType.toLowerCase() === "jobseeker") {
             user = await User.findOne({ email });
             if (user) {
-                return NextResponse.json({ message: "Jobseeker already exists" }, { status: 400 });
+                return NextResponse.json({ message: "User already exists" }, { status: 400 });
             }
         } else if (userType.toLowerCase() === "recruiter") {
             user = await RecruiterRegistrationSchema.findOne({ email });
             if (user) {
-                return NextResponse.json({ message: "Recruiter already exists" }, { status: 400 });
+                return NextResponse.json({ message: "User already exists" }, { status: 400 });
             }
         }
         const hashedPassword = await bcrypt.hash(password, 10);

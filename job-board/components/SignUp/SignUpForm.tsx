@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 import {
     Card,
     CardContent,
@@ -19,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { useGoogleLogin } from '@react-oauth/google'
 import { useState } from "react"
 import axios from "axios"
+import { error } from "console"
 interface userDataType {
     email: string,
     password: string,
@@ -38,34 +40,53 @@ export function SignUpForm({
         },
         onError: (error) => console.log('Google Sign Up Failed:', error)
     });
+    const router = useRouter();
     const [userData, setUserData] = useState<userDataType>({
         email: "",
         password: "",
     })
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
+
         try {
-            console.log(userData);
-            const userType = typeof window !== "undefined" ? localStorage.getItem("userType") : null
+            const userType =
+                typeof window !== "undefined"
+                    ? localStorage.getItem("userType")
+                    : null;
+
             if (!userType || !userData.email || !userData.password) {
-                toast.error("Please fill all the fields", { position: "bottom-right" });
-                return
+                toast.error("Please fill all the fields", {
+                    position: "bottom-right",
+                });
+                return;
             }
-            const userDetails = await axios.post(`/api/signup`, {
+
+            const res = await axios.post(`/api/signup`, {
                 ...userData,
-                userType
+                userType,
             });
-            if (userDetails.status === 201) {
-                toast.success("User created successfully", { position: "bottom-right" });
-                setLogin(true);
+
+            if (res.status === 201) {
+                router.push("/recruiter");
             }
-            else {
-                toast.error(userDetails.data.message || "Signup failed", { position: "bottom-right" });
+
+        } catch (error: any) {
+            console.log("ERROR FULL:", error);
+
+            // ✅ Extract backend message
+            const backendMessage = error?.response?.data?.message;
+
+            if (backendMessage) {
+                toast.error(backendMessage, {
+                    position: "bottom-right",
+                });
+            } else {
+                toast.error("Something went wrong", {
+                    position: "bottom-right",
+                });
             }
-        } catch (error) {
-            toast.error(error instanceof Error ? error.message : String(error), { position: "bottom-right" });
         }
-    }
+    };
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className={cn("flex flex-col gap-6 w-full max-w-sm", className)} {...props}>

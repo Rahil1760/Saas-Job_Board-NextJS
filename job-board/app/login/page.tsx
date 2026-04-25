@@ -6,7 +6,7 @@ import { SignUpForm } from "@/components/SignUp/SignUpForm";
 
 export default function LoginPage() {
     const [login, setLogin] = useState(true);
-    
+
     return (
         <div className="flex flex-col gap-6">
             {login ? (
